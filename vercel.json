@@ -1,0 +1,10 @@
+{
+  "regions": ["fra1"],
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/demo/projects/urban-oasis/configure",
+      "permanent": false
+    }
+  ]
+}

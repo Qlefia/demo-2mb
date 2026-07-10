@@ -1,0 +1,59 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+.next
+dist
+dist-ssr
+storybook-static
+*.local
+
+# Secrets (never commit)
+.env
+.env.local
+.env.*.local
+
+# Backups (contain DB credentials in connection string)
+backups/
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Playwright
+playwright-report/
+test-results/
+blob-report/
+e2e/.auth/
+.playwright-mcp/
+
+# Cursor / agent artifacts (not project source)
+.cursor/compare/
+.cursor/mcp-stdout.txt
+.cursor/mcp-call-args.json
+.cursor/query-only.sql
+.agents/
+.claude/
+.kiro/
+skills-lock.json
+apply2b.json
+_tmp_design_system_LOCKED/
+*.tsbuildinfo
+.open-next/
+.dev.vars
+screencapture-*.pdf
+proscus/
+_proscus_delete_after_restart/

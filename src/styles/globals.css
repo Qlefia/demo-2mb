@@ -1,0 +1,599 @@
+@import "tailwindcss";
+
+/**
+ * Tailwind v4 dark variant — opt-in via `.dark` class on <html>, NOT the
+ * system `prefers-color-scheme: dark` media query (which is the v4 default).
+ *
+ * Without this, every `dark:bg-…` / `dark:text-…` utility activates on any
+ * OS-level dark mode, even when the app itself runs in light theme. That
+ * caused the Sales card surfaces to render as `bg-white/[0.05]` (≈ invisible
+ * on the white page background) instead of `bg-foreground/[0.04]` (the
+ * expected light-grey tint).
+ */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: "Inter", sans-serif;
+
+  --color-primary: var(--ui-primary);
+  --color-primary-foreground: var(--ui-primary-foreground);
+  --color-background: var(--ui-background);
+  --color-foreground: var(--ui-foreground);
+  --color-muted: var(--ui-muted);
+  --color-border: var(--ui-border);
+  --color-input: var(--ui-input);
+  --color-ring: var(--ui-ring);
+
+  --color-accent: #D99E6A;
+  --color-accent-foreground: #171717;
+
+  --color-destructive: #DC2626;
+  --color-destructive-foreground: #fff;
+
+  --color-success: #16A34A;
+  --color-success-foreground: #fff;
+
+  --color-warning: #D97706;
+  --color-warning-foreground: #fff;
+
+  --color-info: #2563EB;
+  --color-info-foreground: #fff;
+
+  --color-hover: color-mix(in srgb, var(--color-primary) 5%, transparent);
+  --color-active: color-mix(in srgb, var(--color-primary) 10%, transparent);
+
+  --animate-spinner-dot: spinner-dot-wave 1.15s ease-in-out infinite;
+}
+
+:root {
+  --page-max-width: 120rem;
+  /** Horizontal inset + vertical rhythm — 1.25rem mobile/tablet, 1.5rem desktop. */
+  --page-padding: 1.25rem;
+  --page-section-gap: 1.25rem;
+  --page-bottom-desktop: 1.5rem;
+  --mobile-nav-height: 3.25rem;
+  --mobile-nav-gap: 1.25rem;
+  --page-bottom-inset: calc(
+    var(--mobile-nav-height) + var(--mobile-nav-gap) + env(safe-area-inset-bottom, 0px)
+  );
+
+  /** CRM / studio form controls and upload surfaces (rounded-xl). Surveys may override via --brand-radius-surface. */
+  --form-field-radius: 0.75rem;
+  /** Studio spacing: inner (label→control), block (search→chips), section (panels). */
+  --studio-field-stack-gap: 0.25rem;
+  --studio-stack-inner-gap: 0.25rem;
+  --studio-stack-block-gap: 0.5rem;
+  --studio-stack-section-gap: 0.75rem;
+  --studio-workspace-padding: 0.75rem;
+  --studio-workspace-list-gap: var(--studio-stack-block-gap);
+  /** Shared height for 16:9 + 3:4 upload pair (widths derived from aspect). */
+  --studio-dual-media-height: 10rem;
+
+  --ui-primary: #171717;
+  --ui-primary-foreground: #fafafa;
+  --ui-primary-foreground-on-light: #fafafa;
+  --ui-primary-foreground-on-dark: #171717;
+  --ui-background: #fff;
+  --ui-foreground: #171717;
+  --ui-muted: #737373;
+  --ui-border: #e5e5e5;
+  --ui-input: #e5e5e5;
+  --ui-ring: #171717;
+  --ui-scrim: color-mix(in oklch, oklch(14% 0.012 265) 38%, transparent);
+  --ui-scrim-strong: color-mix(in oklch, oklch(14% 0.012 265) 52%, transparent);
+  --ui-scrim-subtle: color-mix(in oklch, oklch(14% 0.012 265) 32%, transparent);
+  --ui-scrim-chip: color-mix(in oklch, oklch(16% 0.012 265) 70%, transparent);
+  --ui-video-matte: oklch(11% 0.014 265);
+}
+
+@media (max-width: 320px) {
+  :root {
+    --page-padding: 1rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --page-padding: 1.5rem;
+    --page-section-gap: 1.5rem;
+    --page-bottom-inset: var(--page-bottom-desktop);
+  }
+}
+
+.dark {
+  --ui-primary: #fff;
+  --ui-primary-foreground: #0a0a0a;
+  --ui-background: #0a0a0a;
+  --ui-foreground: #fafafa;
+  --ui-muted: #b4b4b4;
+  --ui-border: #71717a;
+  --ui-input: #71717a;
+  --ui-ring: #fff;
+  --ui-scrim: color-mix(in oklch, oklch(8% 0.02 265) 48%, transparent);
+  --ui-scrim-strong: color-mix(in oklch, oklch(7% 0.022 265) 62%, transparent);
+  --ui-scrim-subtle: color-mix(in oklch, oklch(8% 0.02 265) 34%, transparent);
+  --ui-scrim-chip: color-mix(in oklch, oklch(10% 0.02 265) 76%, transparent);
+  --ui-video-matte: oklch(7% 0.02 265);
+  --color-success: #22c55e;
+  --color-warning: #eab308;
+  --color-hover: color-mix(in srgb, var(--color-primary) 14%, transparent);
+  --color-active: color-mix(in srgb, var(--color-primary) 14%, transparent);
+}
+
+/* Studio settings — spacing hierarchy (inner < block < section) */
+.studio-field-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--studio-field-stack-gap);
+}
+
+.studio-chip-cluster {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--studio-stack-inner-gap);
+}
+
+.studio-block-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--studio-stack-block-gap);
+}
+
+.studio-section-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--studio-stack-section-gap);
+}
+
+/* Grey editor cards (catalogue line, segment, review) */
+.studio-workspace-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--studio-stack-block-gap);
+}
+
+.studio-workspace-list {
+  display: grid;
+  min-width: 0;
+  gap: var(--studio-workspace-list-gap);
+}
+
+/* Overview chips → editable catalogue lines */
+.studio-workspace-zone {
+  display: flex;
+  flex-direction: column;
+  gap: var(--studio-stack-block-gap);
+  padding-top: var(--studio-stack-section-gap);
+  border-top: 1px solid color-mix(in srgb, var(--color-border) 35%, transparent);
+}
+
+.studio-form-save-hint {
+  margin-top: 0;
+}
+
+/* CRM meta labels (min 12px — avoids Impeccable tiny-text on pipeline UI) */
+.crm-meta-label {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+/* Settings / long-form copy width */
+.crm-prose-width {
+  max-width: 42rem;
+  overflow-wrap: anywhere;
+}
+
+/* Survey shell: isolate from app theme, use design system */
+.survey-theme-light {
+  --ui-primary: #171717;
+  --ui-primary-foreground: #fafafa;
+  --ui-background: #fff;
+  --ui-foreground: #171717;
+  --ui-muted: #737373;
+  --ui-border: #e5e5e5;
+  --ui-input: #e5e5e5;
+  --ui-ring: #171717;
+}
+
+.survey-theme-dark {
+  --ui-primary: #fff;
+  --ui-primary-foreground: #0a0a0a;
+  --ui-background: #0a0a0a;
+  --ui-foreground: #fafafa;
+  --ui-muted: #b4b4b4;
+  --ui-border: #71717a;
+  --ui-input: #71717a;
+  --ui-ring: #fff;
+  --color-success: #22c55e;
+  --color-warning: #eab308;
+}
+
+/* CRM buttons match field/surface radius (0.75rem), not legacy survey 0.25rem */
+button.survey-brand-button {
+  border-radius: var(--form-field-radius, 0.75rem);
+}
+
+/* Surfaces (options, cards) and text fields: same token as branding preview / runner */
+.survey-brand-surface,
+.survey-brand-input,
+textarea.survey-brand-input {
+  border-radius: var(--brand-radius-surface, var(--form-field-radius));
+}
+
+/* Icon buttons & compact controls: slightly rounder hover/focus hit (matches rounded-md) */
+.survey-brand-control {
+  border-radius: 0.375rem;
+}
+
+/* Survey branding: radius tokens set on shell (see resolveBrandingRadius) */
+.survey-theme-light button.survey-brand-button,
+.survey-theme-dark button.survey-brand-button {
+  border-radius: var(--brand-radius-button, var(--form-field-radius, 0.75rem));
+}
+
+.survey-theme-light .survey-brand-control,
+.survey-theme-dark .survey-brand-control {
+  border-radius: var(--brand-radius-control, 0.25rem);
+}
+
+@supports (corner-shape: squircle) {
+  .survey-corner-shape-continuous .survey-brand-surface,
+  .survey-corner-shape-continuous.survey-brand-surface {
+    corner-shape: squircle;
+  }
+
+  .survey-corner-shape-continuous .survey-brand-input,
+  .survey-corner-shape-continuous textarea.survey-brand-input {
+    corner-shape: squircle;
+  }
+
+  .survey-corner-shape-continuous button.survey-brand-button {
+    corner-shape: squircle;
+  }
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--color-foreground);
+  background-color: var(--color-background);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+/* Default: no focus ring (requested UX). Use .a11y-strong-focus where a visible indicator is required. */
+:focus-visible {
+  outline: none;
+}
+
+.a11y-strong-focus:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+}
+
+/* Tiptap placeholder */
+.tiptap p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: var(--color-muted);
+  pointer-events: none;
+  height: 0;
+}
+
+/* Shared rich-text styles for Tiptap editor and rendered content */
+:is(.tiptap, .informational-body) {
+  overflow: visible;
+  max-height: none;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+
+  & > * + * {
+    margin-top: 0.5em;
+  }
+  h1 { font-size: 1.5rem; font-weight: 700; }
+  h2 { font-size: 1.25rem; font-weight: 600; }
+  h3 { font-size: 1.1rem; font-weight: 600; }
+  ul { list-style: disc; padding-left: 1.25rem; }
+  ol { list-style: decimal; padding-left: 1.25rem; }
+  blockquote {
+    margin: 0;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.125rem;
+    border: 1px solid color-mix(in srgb, var(--color-border) 75%, transparent);
+    background-color: color-mix(in srgb, var(--color-muted) 8%, var(--color-background));
+    color: var(--color-muted);
+  }
+  pre {
+    background: var(--ui-border);
+    border-radius: 0.25rem;
+    padding: 0.5rem 0.75rem;
+    font-family: monospace;
+    font-size: 0.85rem;
+    overflow-x: auto;
+  }
+  a { color: var(--color-info); text-decoration: underline; }
+  img { max-width: 100%; height: auto; border-radius: 0.25rem; }
+}
+
+/* Registration: right panel — always light “paper”; ignores global dark theme */
+.register-marketing-isolated {
+  color-scheme: light;
+  background-color: #faf9f7;
+  color: #171717;
+  /* Darker accent for small text on paper — WCAG AA vs #faf9f7 (UI accent #D99E6A is for fills) */
+  --color-accent: #6b3d18;
+}
+
+.register-marketing-paper {
+  background-color: #faf9f7;
+  position: relative;
+  isolation: isolate;
+}
+
+/* Animated accent blobs — soft, no screen blend (avoids muddy stacking on paper) */
+.register-marketing-blobs {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.register-marketing-blob {
+  position: absolute;
+  filter: blur(32px);
+  will-change: transform, border-radius;
+  opacity: 0.55;
+  mix-blend-mode: normal;
+  border-radius: 58% 42% 62% 38% / 48% 55% 45% 52%;
+  animation-timing-function: cubic-bezier(0.45, 0.05, 0.25, 1);
+}
+
+.register-marketing-blob--1 {
+  width: min(95%, 460px);
+  height: min(60%, 380px);
+  left: -16%;
+  top: 4%;
+  background: radial-gradient(
+    ellipse 78% 70% at 48% 46%,
+    rgba(255, 214, 170, 0.95) 0%,
+    rgba(244, 186, 120, 0.72) 32%,
+    rgba(217, 158, 106, 0.38) 58%,
+    transparent 78%
+  );
+  animation: register-blob-1 38s cubic-bezier(0.42, 0, 0.2, 1) infinite;
+  animation-delay: -7s;
+}
+
+.register-marketing-blob--2 {
+  width: min(82%, 420px);
+  height: min(54%, 340px);
+  right: -20%;
+  top: 28%;
+  background: radial-gradient(
+    ellipse 74% 66% at 50% 50%,
+    rgba(255, 200, 130, 0.88) 0%,
+    rgba(237, 168, 95, 0.62) 38%,
+    rgba(217, 158, 106, 0.35) 62%,
+    transparent 80%
+  );
+  animation: register-blob-2 47s cubic-bezier(0.38, 0.02, 0.28, 1) infinite;
+  animation-delay: -19s;
+}
+
+.register-marketing-blob--3 {
+  width: min(88%, 440px);
+  height: min(50%, 320px);
+  left: 4%;
+  bottom: -12%;
+  background: radial-gradient(
+    ellipse 72% 62% at 52% 48%,
+    rgba(255, 228, 195, 0.75) 0%,
+    rgba(244, 200, 150, 0.55) 42%,
+    rgba(217, 158, 106, 0.28) 68%,
+    transparent 82%
+  );
+  animation: register-blob-3 53s cubic-bezier(0.4, 0, 0.18, 1) infinite;
+  animation-delay: -31s;
+}
+
+/* Кинематографичное перетекание: сдвиг в vw/vh + лёгкий scale/rotate + «живой» border-radius */
+@keyframes register-blob-1 {
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    border-radius: 58% 42% 62% 38% / 48% 55% 45% 52%;
+  }
+  20% {
+    transform: translate(5vw, 4vh) scale(1.12) rotate(10deg);
+    border-radius: 42% 58% 48% 52% / 58% 42% 55% 45%;
+  }
+  45% {
+    transform: translate(-3vw, 8vh) scale(0.9) rotate(-8deg);
+    border-radius: 62% 38% 55% 45% / 44% 56% 48% 52%;
+  }
+  72% {
+    transform: translate(4vw, -3vh) scale(1.06) rotate(6deg);
+    border-radius: 48% 52% 40% 60% / 52% 48% 62% 38%;
+  }
+  100% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    border-radius: 58% 42% 62% 38% / 48% 55% 45% 52%;
+  }
+}
+
+@keyframes register-blob-2 {
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    border-radius: 52% 48% 55% 45% / 50% 50% 48% 52%;
+  }
+  18% {
+    transform: translate(-7vw, 5vh) scale(1.08) rotate(-12deg);
+    border-radius: 38% 62% 50% 50% / 45% 55% 52% 48%;
+  }
+  38% {
+    transform: translate(4vw, -6vh) scale(0.92) rotate(8deg);
+    border-radius: 55% 45% 42% 58% / 60% 40% 45% 55%;
+  }
+  58% {
+    transform: translate(-2vw, 9vh) scale(1.1) rotate(-5deg);
+    border-radius: 48% 52% 58% 42% / 42% 58% 50% 50%;
+  }
+  82% {
+    transform: translate(6vw, 2vh) scale(0.96) rotate(11deg);
+    border-radius: 60% 40% 48% 52% / 52% 48% 58% 42%;
+  }
+  100% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    border-radius: 52% 48% 55% 45% / 50% 50% 48% 52%;
+  }
+}
+
+@keyframes register-blob-3 {
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    border-radius: 50% 50% 48% 52% / 55% 45% 50% 50%;
+  }
+  22% {
+    transform: translate(6vw, -5vh) scale(1.14) rotate(9deg);
+    border-radius: 44% 56% 62% 38% / 48% 52% 45% 55%;
+  }
+  48% {
+    transform: translate(-5vw, 4vh) scale(0.88) rotate(-11deg);
+    border-radius: 58% 42% 44% 56% / 55% 45% 52% 48%;
+  }
+  74% {
+    transform: translate(3vw, 7vh) scale(1.07) rotate(5deg);
+    border-radius: 50% 50% 52% 48% / 42% 58% 50% 50%;
+  }
+  100% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    border-radius: 50% 50% 48% 52% / 55% 45% 50% 50%;
+  }
+}
+
+/* Very light grain — high opacity was reading as “dirty” on warm paper */
+.register-marketing-noise {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.08;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.55' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.45'/%3E%3C/svg%3E");
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .register-marketing-blob {
+    animation: none !important;
+  }
+}
+
+/** Three-dot loading wave — used by `Spinner` atom. */
+@keyframes spinner-dot-wave {
+  0%,
+  70%,
+  100% {
+    opacity: 0.28;
+    transform: scale(0.62);
+  }
+  35% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-spinner-dot {
+    animation: none !important;
+    opacity: 0.55;
+    transform: none;
+  }
+}
+
+/** Profile avatar photo — pastel halo expands outward from avatar edges. */
+.avatar-photo-bloom {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: 25%;
+  pointer-events: none;
+  transform: scale(1);
+  transform-origin: center center;
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.avatar-photo-trigger:hover .avatar-photo-bloom,
+.avatar-photo-trigger:focus-visible .avatar-photo-bloom,
+.avatar-photo-trigger[data-uploading='true'] .avatar-photo-bloom {
+  transform: scale(1.08);
+}
+
+.avatar-photo-overlay {
+  opacity: 0;
+  transition: opacity 0.28s ease-out;
+}
+
+.avatar-photo-trigger:hover .avatar-photo-overlay,
+.avatar-photo-trigger:focus-visible .avatar-photo-overlay,
+.avatar-photo-trigger[data-uploading='true'] .avatar-photo-overlay {
+  opacity: 1;
+  transition: opacity 0.35s ease-out 0.22s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .avatar-photo-bloom {
+    transition: transform 0.15s ease;
+  }
+
+  .avatar-photo-trigger:hover .avatar-photo-bloom,
+  .avatar-photo-trigger:focus-visible .avatar-photo-bloom,
+  .avatar-photo-trigger[data-uploading='true'] .avatar-photo-bloom {
+    transform: scale(1.05);
+  }
+
+  .avatar-photo-trigger:hover .avatar-photo-overlay,
+  .avatar-photo-trigger:focus-visible .avatar-photo-overlay,
+  .avatar-photo-trigger[data-uploading='true'] .avatar-photo-overlay {
+    transition-delay: 0s;
+  }
+}
+
+/** Calendar meeting chips — pastel halo expands outward by equal px on every edge. */
+.calendar-event-bloom {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  transition: inset 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.calendar-event-chip:hover .calendar-event-bloom,
+.calendar-event-chip:focus-visible .calendar-event-bloom,
+.calendar-event-chip[data-selected='true'] .calendar-event-bloom {
+  inset: -4px;
+}
+
+.calendar-event-chip:hover .calendar-event-surface,
+.calendar-event-chip:focus-visible .calendar-event-surface,
+.calendar-event-chip[data-selected='true'] .calendar-event-surface {
+  border-color: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .calendar-event-bloom {
+    transition: inset 0.15s ease;
+  }
+
+  .calendar-event-chip:hover .calendar-event-bloom,
+  .calendar-event-chip:focus-visible .calendar-event-bloom,
+  .calendar-event-chip[data-selected='true'] .calendar-event-bloom {
+    inset: -3px;
+  }
+}

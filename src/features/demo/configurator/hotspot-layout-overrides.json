@@ -1,0 +1,70 @@
+{
+  "hero": {
+    "upper-cabinets": {
+      "x": 77.9,
+      "y": 37.4
+    },
+    "backsplash": {
+      "x": 87.8,
+      "y": 60.2
+    },
+    "lower-cabinets": {
+      "x": 78.8,
+      "y": 87.3
+    },
+    "wall-color": {
+      "x": 42.4,
+      "y": 52.9
+    },
+    "furniture": {
+      "x": 29.6,
+      "y": 87.9
+    }
+  },
+  "kitchen": {
+    "upper-cabinets": {
+      "x": 61.3,
+      "y": 37.2
+    },
+    "backsplash": {
+      "x": 46.7,
+      "y": 62.5
+    },
+    "lower-cabinets": {
+      "x": 61.4,
+      "y": 37.1
+    }
+  },
+  "wall": {
+    "upper-cabinets": {
+      "x": 77.3,
+      "y": 37.8
+    },
+    "backsplash": {
+      "x": 69.4,
+      "y": 58.7
+    },
+    "lower-cabinets": {
+      "x": 67.6,
+      "y": 86.5
+    },
+    "wall-color": {
+      "x": 42.5,
+      "y": 52.7
+    },
+    "furniture": {
+      "x": 29.7,
+      "y": 87.7
+    }
+  },
+  "workstation": {
+    "wall-color": {
+      "x": 56.4,
+      "y": 51.8
+    },
+    "furniture": {
+      "x": 39.9,
+      "y": 79.7
+    }
+  }
+}
