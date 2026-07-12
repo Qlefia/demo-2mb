@@ -201,7 +201,7 @@ export function ConfiguratorPreview({
                   type="button"
                   aria-label={demoCopy.galleryPrev}
                   onClick={() => stepGallery(-1)}
-                  className="absolute top-1/2 left-0 z-30 -translate-y-1/2 border-0 bg-transparent p-0 text-white/45 drop-shadow-[0_1px_3px_rgba(0,0,0,0.45)] transition-colors hover:text-white focus-visible:outline-none"
+                  className="absolute top-1/2 left-1 z-20 flex size-9 -translate-y-1/2 items-center justify-center border-0 bg-transparent p-0 text-white/45 drop-shadow-[0_1px_3px_rgba(0,0,0,0.45)] transition-colors hover:text-white focus-visible:outline-none"
                 >
                   <ChevronLeft className="size-9" strokeWidth={1.5} aria-hidden />
                 </button>
@@ -209,7 +209,7 @@ export function ConfiguratorPreview({
                   type="button"
                   aria-label={demoCopy.galleryNext}
                   onClick={() => stepGallery(1)}
-                  className="absolute top-1/2 right-0 z-30 -translate-y-1/2 border-0 bg-transparent p-0 text-white/45 drop-shadow-[0_1px_3px_rgba(0,0,0,0.45)] transition-colors hover:text-white focus-visible:outline-none"
+                  className="absolute top-1/2 right-1 z-20 flex size-9 -translate-y-1/2 items-center justify-center border-0 bg-transparent p-0 text-white/45 drop-shadow-[0_1px_3px_rgba(0,0,0,0.45)] transition-colors hover:text-white focus-visible:outline-none"
                 >
                   <ChevronRight className="size-9" strokeWidth={1.5} aria-hidden />
                 </button>

@@ -105,7 +105,7 @@ export function ConfiguratorHotspots({
   }
 
   return (
-    <div className="pointer-events-none absolute inset-0 z-10">
+    <div className="pointer-events-none absolute inset-0 z-40">
       {hotspots.map((spot) => {
         const active = activeHotspotId === spot.id
         const hovered = hoveredHotspotId === spot.id
@@ -225,7 +225,7 @@ export function ConfiguratorHotspots({
                 <span className="sr-only">{spot.label}</span>
               </button>
 
-              {hovered && (!activeHotspotId || active) ? (
+              {hovered ? (
                 <HotspotHoverPanel zoneLabel={selection.zoneLabel} description={materialDescription} />
               ) : null}
             </div>

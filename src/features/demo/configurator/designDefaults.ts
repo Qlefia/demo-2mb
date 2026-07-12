@@ -6,7 +6,7 @@ export const DESIGN_DEFAULT_KITCHEN: Record<
 > = {
   'design-1': { colorId: 'color-1', upperCabinetId: 'upper-1', backsplashId: 'splash-1' },
   'design-2': { colorId: 'color-1', upperCabinetId: 'upper-1', backsplashId: 'splash-1' },
-  'design-3': { colorId: 'color-3', upperCabinetId: 'upper-closed', backsplashId: 'splash-default' },
+  'design-3': { colorId: 'color-1', upperCabinetId: 'upper-closed', backsplashId: 'splash-default' },
 }
 
 export const DESIGN_DEFAULT_LIVING: Record<
